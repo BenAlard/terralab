@@ -33,6 +33,10 @@ resource "aws_launch_configuration" "example" {
 				nohup busybox httpd -f -p ${var.server_port} &
 				EOF
 	user_data_replace_on_change = true
+	lifecycle {
+		create_before_destroy = true
+	}
+}
 
 resource "aws_autoscaling_group" "example" {
 	launch_configuration = aws_launch_configuration.example.name
