@@ -1,8 +1,8 @@
-provider = "aws" {
+provider "aws" {
 	region = "eu-west-1"
 }
 
-resource = "aws_s3_bucket" "terraform_state" {
+resource "aws_s3_bucket" "terraform_state" {
 	bucket = "terraform-up-and-running-state-bal"
 
 	# Prevent deletion
@@ -15,7 +15,7 @@ resource = "aws_s3_bucket" "terraform_state" {
 # state files
 resource "aws_s3_bucket_versioning" "enabled" {
 	bucket = aws_s3_bucket.terraform_state.id
-	versioning_configuration {$
+	versioning_configuration {
 		status = "Enabled"
 	}
 }
@@ -26,7 +26,7 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "default" {
 
 	rule {
 		apply_server_side_encryption_by_default {
-			sse_algorythm = "AES256"
+			sse_algorithm = "AES256"
 		}
 	}
 }
@@ -42,7 +42,7 @@ resource "aws_s3_bucket_public_access_block" "public_access" {
 resource "aws_dynamodb_table" "terraform_locks" {
 	name		= "terraform-up-and-running-locks"
 	billing_mode	= "PAY_PER_REQUEST"
-	hask_key	= "LockID"
+	hash_key	= "LockID"
 
 	attribute {
 		name	= "LockID"
