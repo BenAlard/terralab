@@ -55,13 +55,12 @@ resource "aws_launch_configuration" "example" {
 	image_id 		=	"ami-03cc8375791cb8bcf"
 	instance_type 	=	"t2.micro"
 	security_groups =	[aws_security_group.instance.id]
-	user_data	=	<<-EOF
-				#!/bin/bash
-				echo "Hello, World" > index.html
-				echo "${data.terraform_remote_state.db.outputs.address}" >> index.html
-				echo "${data.terraform_remote_state.db.outputs.port}" >> index.html
-				nohup busybox httpd -f -p ${var.server_port} &
-				EOF
+	user_data	=	templatefile("user-data.sh", {
+		server_port	= var.server_port
+		db_address	= data.terraform_remote_state.db.outputs.address
+		db_port		= data.terraform_remote_state.db.outputs.port
+		})
+
 	lifecycle {
 		create_before_destroy = true
 	}
