@@ -8,11 +8,6 @@ variable "server_port" {
 	default = 8080
 }
 
-output "public_ip" {
-	value = aws_instance.example.public_ip
-	description = "Public IP of the webserver"
-}
-
 resource "aws_security_group" "instance" {
 	name = "terraform-example-instance"
 	ingress {
@@ -32,7 +27,6 @@ resource "aws_launch_configuration" "example" {
 				echo "Hello, World" > index.html
 				nohup busybox httpd -f -p ${var.server_port} &
 				EOF
-	user_data_replace_on_change = true
 	lifecycle {
 		create_before_destroy = true
 	}
@@ -51,8 +45,4 @@ resource "aws_autoscaling_group" "example" {
 		}
 	}
 
-tags = {
-	Name = "terraform.example"
-	}
-}
 
