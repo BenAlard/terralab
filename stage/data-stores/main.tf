@@ -6,7 +6,7 @@ resource "aws_db_instance" "example" {
 	identifier_prefix	= "terraform-up-and-running"
 	engine			= "mysql"
 	allocated_storage	= 10
-	instance_class		= "db.t2.micro"
+	instance_class		= "db.t3.micro"
 	skip_final_snapshot	= true
 	db_name			= "example_database"
 
@@ -17,7 +17,7 @@ resource "aws_db_instance" "example" {
 terraform {
 	backend "s3" {
 		bucket	= "terraform-up-and-running-state-bal"
-		key	= "stage/data-stores/terraform.tfstate"
+		key	= "stage/data-stores/mysql/terraform.tfstate"
 		region	= "eu-west-1"
 
 	dynamodb_table	= "terraform-up-and-running-locks"

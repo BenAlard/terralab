@@ -13,6 +13,16 @@ data "aws_subnets" "default" {
 	}
 }
 
+data "terraform_remote_state" "db" {
+	backend = "S3"
+
+	config = {
+		bucket	= "terraform-up-and-running-state-bal"
+		key	= "stage/data-stores/mysql/terraform.tfstate"
+		region	= "eu-west-1"
+	}
+}
+
 resource "aws_security_group" "instance" {
 	name = "terraform-example-instance"
 	ingress {
