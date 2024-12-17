@@ -14,7 +14,7 @@ data "aws_subnets" "default" {
 }
 
 data "terraform_remote_state" "db" {
-	backend = "S3"
+	backend = "s3"
 
 	config = {
 		bucket	= "terraform-up-and-running-state-bal"
