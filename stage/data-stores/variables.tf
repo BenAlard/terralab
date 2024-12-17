@@ -1,11 +1,11 @@
 variable "db_username" {
-	decription	= "username"
+	description	= "username"
 	type		= string
-	sesitive	= true
+	sensitive	= true
 }
 
 variable "db_password" {
-	decription	= "password"
+	description	= "password"
 	type		= string
-	sesitive	= true
+	sensitive	= true
 }
