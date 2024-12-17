@@ -2,12 +2,6 @@ provider "aws" {
 	region = "eu-west-1"
 }
 
-variable "server_port" {
-	description = "Port used by server for HTTP resources"
-	type = number
-	default = 8080
-}
-
 data "aws_vpc" "default" {
 	default = true
 }
@@ -131,8 +125,4 @@ resource "aws_lb_listener_rule" "asg" {
 		type = "forward"
 		target_group_arn = aws_lb_target_group.asg.arn
 	}
-}
-output	"alb_dns_name" {
-	value = aws_lb.example.dns_name
-	description = "Domain name of the load balancer"
 }
