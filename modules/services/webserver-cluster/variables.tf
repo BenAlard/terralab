@@ -18,3 +18,18 @@ variable "db_remote_state_key" {
 	description	= "Path to the db's remote state in s3"
 	type		= string
 }
+
+variable "instance_type" {
+	description	= "Type of EC2 instance"
+	type		= string
+}
+
+variable "min_size" {
+	description	= "Min number of instances in the ASG"
+	type		= number
+}
+
+variable "max_size" {
+	description	= "Max number of instances in the ASG"
+	type		= number
+}

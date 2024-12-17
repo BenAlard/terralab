@@ -53,7 +53,7 @@ resource "aws_security_group" "alb" {
 
 resource "aws_launch_configuration" "example" {
 	image_id 		=	"ami-03cc8375791cb8bcf"
-	instance_type 	=	"t2.micro"
+	instance_type 	=	var.instance_type
 	security_groups =	[aws_security_group.instance.id]
 	user_data	=	templatefile("/home/ben/lab/terraform/modules/services/webserver-cluster/user-data.sh", {
 		server_port	= var.server_port
@@ -73,8 +73,8 @@ resource "aws_autoscaling_group" "example" {
 	target_group_arns = [aws_lb_target_group.asg.arn]
 	health_check_type = "ELB"
 
-	min_size = 2
-	max_size = 3
+	min_size = var.min_size
+	max_size = var.max_size
 
 	tag {
 		key = "Name"
