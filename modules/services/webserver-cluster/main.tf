@@ -43,27 +43,33 @@ resource "aws_security_group" "instance" {
 
 resource "aws_security_group" "alb" {
 	name = "${var.cluster_name}-alb"
-	#Allow inbound http
-	ingress {
-		from_port = local.http_port
-		to_port = local.http_port
-		protocol = "tcp"
-		cidr_blocks = ["0.0.0.0/0"]
-	}
-	#Allow outbound all
-	egress {
-		from_port = local.any_port
-		to_port = local.any_port
-		protocol = local.any_protocol
-		cidr_blocks = local.all_ips
-	}
+}
+
+resource "aws_security_group_rule" "allow_http_inbound" {
+	type			= "ingress"
+	security_group_id	= aws_security_group.alb.id
+		
+	from_port = local.http_port
+	to_port = local.http_port
+	protocol = "tcp"
+	cidr_blocks = ["0.0.0.0/0"]
+}
+
+resource "aws_security_group_rule" "all_all_outbound" {
+	type			= "egress"
+	security_group_id	= aws_security_group.alb.id
+
+	from_port = local.any_port
+	to_port = local.any_port
+	protocol = local.any_protocol
+	cidr_blocks = local.all_ips
 }
 
 resource "aws_launch_configuration" "example" {
 	image_id 		=	"ami-03cc8375791cb8bcf"
 	instance_type 	=	var.instance_type
 	security_groups =	[aws_security_group.instance.id]
-	user_data	=	templatefile("/home/ben/lab/terraform/modules/services/webserver-cluster/user-data.sh", {
+	user_data	=	templatefile("${path.module}/user-data.sh", {
 		server_port	= var.server_port
 		db_address	= data.terraform_remote_state.db.outputs.address
 		db_port		= data.terraform_remote_state.db.outputs.port
