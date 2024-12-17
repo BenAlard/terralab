@@ -29,6 +29,24 @@ resource "aws_security_group" "instance" {
 	}
 }
 
+resource "aws_security_group" "alb" {
+	name = "terraform-example-alb"
+	#Allow inbound http
+	ingress {
+		from_port = 80
+		to_port = 80
+		protocol = "tcp"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+	#Allow outbound all
+	egress {
+		from_port = 0
+		to_port = 0
+		protocol = "-1"
+		cidr_blocks = ["0.0.0.0/0"]
+	}
+}
+
 resource "aws_launch_configuration" "example" {
 	image_id 		=	"ami-03cc8375791cb8bcf"
 	instance_type 	=	"t2.micro"
@@ -61,6 +79,7 @@ resource "aws_lb" "example" {
 	name = "terraform-asg-example"
 	load_balancer_type = "application"
 	subnets = data.aws_subnets.default.ids
+	security_groups = [aws_security_group.alb.id]
 }
 
 resource "aws_lb_listener" "http" {
