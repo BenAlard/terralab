@@ -48,7 +48,7 @@ resource "aws_autoscaling_group" "example" {
 	vpc_zone_identifier = data.aws_subnets.default.ids
 
 	min_size = 2
-	max_size = 10
+	max_size = 3
 
 	tag {
 		key = "Name"
